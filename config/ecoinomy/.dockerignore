@@ -1,0 +1,14 @@
+.env
+.git
+.github
+.gitignore
+.vs
+.vscode
+docker-compose.yml
+**/celerybeat.pid
+README.md
+**/.idea
+**/__pycache__
+**/venv
+**/node_modules
+kubernetes

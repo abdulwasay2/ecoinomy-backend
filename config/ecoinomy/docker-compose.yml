@@ -1,0 +1,134 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    networks:
+      - backend-network
+    environment:
+      - POSTGRES_USER=django_traefik
+      - POSTGRES_PASSWORD=django_traefik
+      - POSTGRES_DB=django_traefik
+  
+  app:
+    container_name: chat-app
+    build:
+      context: .
+      dockerfile: config/chat-app/Dockerfile
+    image: chat-app-image:latest
+    command: >
+      bash -c "
+      python manage.py migrate; uvicorn --host 0.0.0.0 --port 8000 --reload --proxy-headers chat_app.asgi:application"
+    hostname: chat_app
+    volumes:
+      - ./chat_app:/chat_app
+      - static:/srv/static
+      - media:/srv/media
+    networks:
+      - backend-network
+    links:
+      - redis
+    depends_on:
+      - db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`django.localhost`)"
+      # - "traefik.http.services.app.loadbalancer.server.port=8000"
+      # - "traefik.http.routers.app.tls=true"
+      # - "traefik.http.routers.app.tls.certresolver=letsencrypt"
+    env_file:
+      - dev.env
+
+
+  # celery:
+  #   container_name: chat-app-booking
+  #   image: chat-app-image:latest
+  #   command: celery -A chat_app worker -l info
+  #   volumes:
+  #     - ./chat_app:/chat_app
+  #   depends_on:
+  #     - app
+  #   networks:
+  #     - backend-network
+  #   links:
+  #     - redis
+  #   env_file:
+  #     - dev.env
+  
+  # celery-beat:
+  #   container_name: chat-app-beat-booking
+  #   image: chat-app-image:latest
+  #   command: celery -A chat_app beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+  #   volumes:
+  #     - ./chat_app:/chat_app
+  #   depends_on:
+  #     - app
+  #   networks:
+  #     - backend-network
+  #   links:
+  #     - redis
+  #   env_file:
+  #     - dev.env
+
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    ports:
+      - target: 80
+        published: 80
+        mode: host
+      - target: 443
+        published: 443
+        mode: host
+      - target: 8080
+        published: 8080
+        mode: host
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./config/traefik/acme.json:/acme.json"
+      - "./config/traefik/traefik.dev.toml:/etc/traefik/traefik.toml"
+    depends_on:
+      - app
+    networks:
+      - backend-network
+
+  redis:
+    container_name: chat-app-redis-booking
+    image: bitnami/redis:latest
+    hostname: redis
+    expose:
+      - 6379
+    environment:
+      - REDIS_PASSWORD=redis
+    networks:
+      - backend-network
+  
+  # nginx:
+  #   container_name: nginx-chat-app-dev
+  #   image: nginx:mainline-alpine
+  #   hostname: nginx
+  #   restart: on-failure
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - ./config/nginx/development:/etc/nginx/conf.d
+  #     - static:/srv/static:ro
+  #     - media:/srv/media:ro
+  #   depends_on:
+  #     - app
+  #   networks:
+  #     - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
+
+volumes:
+  static:
+  media:
+  redisdata:
+  postgres_data:

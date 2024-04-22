@@ -1,0 +1,57 @@
+argon2-cffi
+boto3
+# Brotli
+celery
+Django
+django-admin-rangefilter
+# django-push-notifications
+django-axes
+django-cacheops
+django-clearcache
+django-cors-headers
+django-countries
+# django-csp
+django-dbbackup
+django-debug-toolbar
+django-environ
+django-filter
+# django-guardian
+django-health-check
+django-hijack
+# django-import-export
+# django-money
+django-permissions-policy
+django-phonenumber-field
+django-redis
+django-simple-history
+django-split-settings
+django-storages
+djangorestframework
+djangorestframework-datatables
+djangorestframework-simplejwt
+django-allauth==0.51.0
+django-ses
+drf-extra-fields
+drf-spectacular
+drf-extra-fields
+dj-rest-auth==2.2.5
+drf-extensions
+gunicorn
+httptools
+# Levenshtein
+messagebird
+# openpyxl
+pandas
+phonenumbers
+Pillow
+pyhumps
+psutil
+psycopg2-binary
+python-magic
+redis
+requests
+uvicorn
+django-taggit
+pyotp
+channels
+channels-redis

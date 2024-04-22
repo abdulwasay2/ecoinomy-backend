@@ -1,0 +1,1 @@
+from ecoinomy.ooder_australia_backend.settings.development import *
