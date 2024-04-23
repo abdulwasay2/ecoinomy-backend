@@ -12,23 +12,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(read_only=True)
     country = CountryField(required=False)
     nationality = CountryField(required=False)
 
     class Meta:
         model = Profile
         fields = '__all__'
-
-        # def update(self, instance, validated_data):
-        #     profile_data = validated_data.pop('profile', None)
-        #     if profile_data:
-        #         profile = instance.profile
-        #         for attr, value in profile_data.items():
-        #             setattr(profile, attr, value)
-        #         profile.save()
-        #     return super().update(instance, validated_data)
-
+        read_only_fields = ("id", "user", "email", "created_at", "updated_at")
 
 
 # class UserSerializer(serializers.ModelSerializer):
