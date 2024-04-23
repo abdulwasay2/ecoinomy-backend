@@ -63,9 +63,6 @@ def update_profile(instance, validated_data):
     :return: the updated profile object
     """
     instance.user.email = validated_data.get("email", instance.user.email)
-    interests = validated_data.pop('interests', None)
-    if interests != None or type(interests) == list:
-        instance.interests.set(interests)
     for data in validated_data:
         if validated_data[data] is not None:
             setattr(instance, data, validated_data[data])

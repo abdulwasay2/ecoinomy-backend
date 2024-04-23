@@ -30,8 +30,9 @@ class Profile(BaseModel):
     )
     first_name = models.CharField(max_length=128, blank=True, null=True)
     last_name = models.CharField(max_length=128, blank=True, null=True)
-    email = models.CharField(unique=True, max_length=128, blank=True, null=True)
+    email = models.EmailField("Email address", unique=True, max_length=128, blank=True, null=True)
     phone_number = models.CharField(max_length=50, blank=True, null=True)
+    country = CountryField(max_length=255, null=True, blank=True, default="Australia")
     nationality = CountryField(max_length=255, null=True, blank=True, default="Australia")
     city = models.CharField(max_length=255, null=True, blank=True, default="")
     address = models.CharField(max_length=255, null=True, blank=True, default="")
@@ -90,7 +91,7 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
             'unique': _("A user with that username already exists."),
         },
     )
-    email = models.EmailField("Email address", unique=True)
+    email = models.EmailField("Email address", unique=True, null=True, blank=True)
     # location = models.PointField(geography=True, blank=True, null=True)
 
     # Permissions
@@ -110,7 +111,7 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
         db_table = "user"
 
     def __str__(self):
-        return self.email
+        return str(self.id)
 
     @property
     def is_staff(self):

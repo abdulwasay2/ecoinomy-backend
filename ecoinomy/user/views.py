@@ -25,33 +25,27 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.Gen
     permission_classes = (AllowAny,)
 
     def get_object(self):
-        print("get_object")
         request = self.request
         current_user = request.user
         return get_object_or_404(self.get_queryset(), id=1)
     
     def get_queryset(self):
-        print("get_queryset")
         request = self.request
         current_user = request.user
         return User.objects.filter(id=1)
     
     def retrieve(self, request, *args, **kwargs):
-        print("retrieve")
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
     
     def create(self, request, *args, **kwargs):
-        print("create")
-        print(request.data)
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class ProfileViewSet(mixins.RetrieveModelMixin, 
