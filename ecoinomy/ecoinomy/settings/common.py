@@ -40,6 +40,7 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
+    'dj_rest_auth',
     "dj_rest_auth.registration",
     "rest_framework_simplejwt.token_blacklist",
     "rest_framework",
@@ -151,7 +152,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-CORS_ALLOWED_ORIGINS = ["*"]
+CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:8000"]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = False
 
@@ -215,13 +216,13 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Channels Configs
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {[env("REDIS_URL")]},
-        # "ROUTING": "core.routing.channel_routing",
-    },
-}
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {[env("REDIS_URL")]},
+#         # "ROUTING": "core.routing.channel_routing",
+#     },
+# }
 
 # DRF SPECTACULAR
 SPECTACULAR_SETTINGS = {
