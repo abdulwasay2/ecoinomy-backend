@@ -105,9 +105,9 @@ DATABASES = {
 # AllAuth configs
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "user.serializers.UserSerializer",
-    "LOGIN_SERIALIZER": "eco_auth.serializers.LoginSerializer",
-    "PASSWORD_RESET_SERIALIZER": "eco_auth.serializers.PasswordResetSerializer",
-    "PASSWORD_RESET_CONFIRM_SERIALIZER": "eco_auth.serializers.CustomPasswordResetConfirmSerializer",
+    # "LOGIN_SERIALIZER": "eco_auth.serializers.LoginSerializer",
+    # "PASSWORD_RESET_SERIALIZER": "eco_auth.serializers.PasswordResetSerializer",
+    # "PASSWORD_RESET_CONFIRM_SERIALIZER": "eco_auth.serializers.CustomPasswordResetConfirmSerializer",
 }
 
 REST_USE_JWT = True

@@ -62,7 +62,8 @@ def phone_number_exists(phone_number):
 
 def get_user_by_email_phone_number(email, phone_number):
     users = get_user_model().objects
-    ret = users.filter(Q(phone_number__iexact=phone_number) | Q(email__iexact=email))
+    # ret = users.filter(Q(phone_number__iexact=phone_number) | Q(email__iexact=email))
+    ret = users.filter(Q(email__iexact=email))
     return ret.first()
 
 
@@ -70,7 +71,7 @@ def generate_otp(secret, interval=300):
     return TOTP(secret, interval=interval)
 
 
-def send_login_otp_to_user(email, phone_number):
+def send_login_otp_to_user(email, phone_number=None):
     subject = "Ecoinomy Login OTP"
     code = generate_otp().now()
     message = f"Your one time passcode for login is {code}"
@@ -82,7 +83,8 @@ def send_login_otp_to_user(email, phone_number):
             settings.EMAIL_HOST_USER,
             [email]
         )
-    elif phone_number:
+
+    if phone_number:
         pass
 
 

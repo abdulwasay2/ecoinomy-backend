@@ -1,7 +1,5 @@
-from django.utils.translation import gettext_lazy as _
-from requests.exceptions import HTTPError
 from rest_framework import serializers
-from rest_framework.reverse import reverse
+from dj_rest_auth.registration.serializers import RegisterSerializer
 
 
 try:
@@ -10,14 +8,18 @@ except ImportError:
     raise ImportError('allauth needs to be added to INSTALLED_APPS.')
 
 
-class CustomRegisterSerializers(serializers.Serializer):
-    email = serializers.EmailField(required=allauth_settings.EMAIL_REQUIRED)
+class CustomRegisterSerializers(RegisterSerializer):
+    username = None
+    email = serializers.EmailField(required=False)
     phone_number = serializers.CharField(required=False)
     password1 = None
     password2 = None
 
+    # class Meta:
+    #     fields = ['email', 'phone_number']
+
     def validate(self, data):
-        pass
+        return data
 
     def validate_password1(self, password):
         pass
