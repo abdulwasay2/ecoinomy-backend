@@ -24,7 +24,7 @@ class UserTokenGenerator(PasswordResetTokenGenerator):
     def make_token(self, user):
         return self._make_token_with_timestamp(user, int(timezone.datetime.now().timestamp()))
 
-    def check_token(self, user, token):
+    def check_token(self, user=None, token=None):
         user_model = get_user_model()
         if not token:
             return None
@@ -60,18 +60,18 @@ def phone_number_exists(phone_number):
     return ret
 
 
-def get_user_by_email_phone_number(email, phone_number):
+def get_user_by_email_phone_number(email=None, phone_number=None):
     users = get_user_model().objects
     # ret = users.filter(Q(phone_number__iexact=phone_number) | Q(email__iexact=email))
     ret = users.filter(Q(email__iexact=email))
     return ret.first()
 
 
-def generate_otp(secret, interval=300):
+def generate_otp(secret=settings.OTP_SECRET_KEY, interval=300):
     return TOTP(secret, interval=interval)
 
 
-def send_login_otp_to_user(email, phone_number=None):
+def send_login_otp_to_user(email=None, phone_number=None):
     subject = "Ecoinomy Login OTP"
     code = generate_otp().now()
     message = f"Your one time passcode for login is {code}"
@@ -80,7 +80,7 @@ def send_login_otp_to_user(email, phone_number=None):
         send_mail(
             subject,
             message,
-            settings.EMAIL_HOST_USER,
+            settings.FROM_EMAIL,
             [email]
         )
 

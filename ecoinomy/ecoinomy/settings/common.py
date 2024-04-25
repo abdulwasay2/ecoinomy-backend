@@ -104,10 +104,10 @@ DATABASES = {
 
 # AllAuth configs
 REST_AUTH_SERIALIZERS = {
-    "USER_DETAILS_SERIALIZER": "user.serializers.UserSerializer",
+    "USER_DETAILS_SERIALIZER": "user.serializers.UserDetailSerializer",
     # "LOGIN_SERIALIZER": "eco_auth.serializers.LoginSerializer",
-    # "PASSWORD_RESET_SERIALIZER": "eco_auth.serializers.PasswordResetSerializer",
-    # "PASSWORD_RESET_CONFIRM_SERIALIZER": "eco_auth.serializers.CustomPasswordResetConfirmSerializer",
+    "PASSWORD_RESET_SERIALIZER": "eco_auth.serializers.PasswordResetSerializer",
+    "PASSWORD_RESET_CONFIRM_SERIALIZER": "eco_auth.serializers.CustomPasswordResetConfirmSerializer",
 }
 
 REST_USE_JWT = True
@@ -122,7 +122,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_EMAIL_VERIFICATION = None
 ACCOUNT_ADAPTER = "ecoinomy.adapters.AccountAdapter"
 ACCOUNT_LOGOUT_ON_GET = False
 ACCOUNT_USER_DISPLAY = "user.helpers.user_display_email"
@@ -162,7 +162,7 @@ AWS_SES_REGION_NAME = env("AWS_SES_REGION_NAME")
 AWS_SES_REGION_ENDPOINT = env("AWS_SES_REGION_ENDPOINT")
 AWS_SES_ACCESS_KEY_ID = env("AWS_SES_ACCESS_KEY_ID")
 AWS_SES_SECRET_ACCESS_KEY = env("AWS_SES_SECRET_ACCESS_KEY")
-AWS_SES_FROM_EMAIL = env("AWS_SES_FROM_EMAIL")
+FROM_EMAIL = env("AWS_SES_FROM_EMAIL")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
