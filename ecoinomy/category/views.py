@@ -8,7 +8,7 @@ from category.serializers import (
 from category.models import Category, CarousalItem
 
 
-class CategoryViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class CategoryViewSet(viewsets.ModelViewSet):
     """"""
 
     serializer_class = CategorySerializers
@@ -21,7 +21,7 @@ class CategoryViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         return super().get_permissions()
 
 
-class CarouselViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class CarouselViewSet(viewsets.ModelViewSet):
     """"""
 
     serializer_class = CarouselSerializers
