@@ -8,6 +8,7 @@ from category import views
 router = DefaultRouter()
 
 router.register(r"", views.CategoryViewSet, basename='category')
+router.register(r"carousel", views.CarouselViewSet, basename='carousel')
 
 urlpatterns = [
     re_path("", include(router.urls)),

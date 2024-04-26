@@ -1,33 +1,34 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, mixins, status
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 from category.serializers import (
     CategorySerializers,
+    CarouselSerializers
 )
-
-from .models import Cateogry
+from category.models import Category, CarousalItem
 
 
 class CategoryViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    """
-    Viewset for performing crud operations on the 
-    logged in user entity \n
-    :route params \n
-           : id is the id of the existing user object 
-    """
-    serializer_class = CategorySerializers
-    permission_classes = (AllowAny,)
+    """"""
 
-    def get_object(self):
-        return get_object_or_404(self.get_queryset(), id=1)
-    
-    def get_queryset(self):
-        return Cateogry.objects.filter(id=1)
-    
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
-    
+    serializer_class = CategorySerializers
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    queryset = Category.objects.all()
+
+    def get_permissions(self):
+        if self.action in ["list", "retrieve"]:
+            return (AllowAny,)
+        return super().get_permissions()
+
+
+class CarouselViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """"""
+
+    serializer_class = CarouselSerializers
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    queryset = CarousalItem.objects.all()
+
+    def get_permissions(self):
+        if self.action in ["list", "retrieve"]:
+            return (AllowAny,)
+        return super().get_permissions()
