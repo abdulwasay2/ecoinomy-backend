@@ -11,19 +11,6 @@ from django.template.loader import render_to_string
 
 class AccountAdapter(DefaultAccountAdapter):
 
-    def send_mail(self, template_prefix, email, context):
-        try:
-            send_mail(
-                template_prefix,
-                email,
-                context,
-                subject="Please Verify Your Account",
-            )
-        except Exception as e:
-            print("Context: ", context)
-            print("Error: ", e)
-            print("Error sending confirmation email.")
-
     def save_user(self, request, user, form, commit=True):
         user = super().save_user(request, user, form, commit)
         profile = Profile()
