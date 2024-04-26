@@ -40,6 +40,7 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.facebook",
+    'dj_rest_auth',
     "dj_rest_auth.registration",
     "rest_framework_simplejwt.token_blacklist",
     "rest_framework",
@@ -103,8 +104,8 @@ DATABASES = {
 
 # AllAuth configs
 REST_AUTH_SERIALIZERS = {
-    "USER_DETAILS_SERIALIZER": "user.serializers.UserSerializer",
-    "LOGIN_SERIALIZER": "eco_auth.serializers.LoginSerializer",
+    "USER_DETAILS_SERIALIZER": "user.serializers.UserDetailSerializer",
+    # "LOGIN_SERIALIZER": "eco_auth.serializers.LoginSerializer",
     "PASSWORD_RESET_SERIALIZER": "eco_auth.serializers.PasswordResetSerializer",
     "PASSWORD_RESET_CONFIRM_SERIALIZER": "eco_auth.serializers.CustomPasswordResetConfirmSerializer",
 }
@@ -121,7 +122,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_EMAIL_VERIFICATION = None
 ACCOUNT_ADAPTER = "ecoinomy.adapters.AccountAdapter"
 ACCOUNT_LOGOUT_ON_GET = False
 ACCOUNT_USER_DISPLAY = "user.helpers.user_display_email"
@@ -151,7 +152,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-CORS_ALLOWED_ORIGINS = ["*"]
+CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:8000"]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = False
 
@@ -161,7 +162,7 @@ AWS_SES_REGION_NAME = env("AWS_SES_REGION_NAME")
 AWS_SES_REGION_ENDPOINT = env("AWS_SES_REGION_ENDPOINT")
 AWS_SES_ACCESS_KEY_ID = env("AWS_SES_ACCESS_KEY_ID")
 AWS_SES_SECRET_ACCESS_KEY = env("AWS_SES_SECRET_ACCESS_KEY")
-AWS_SES_FROM_EMAIL = env("AWS_SES_FROM_EMAIL")
+FROM_EMAIL = env("AWS_SES_FROM_EMAIL")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -215,13 +216,13 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Channels Configs
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {[env("REDIS_URL")]},
-        # "ROUTING": "core.routing.channel_routing",
-    },
-}
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {[env("REDIS_URL")]},
+#         # "ROUTING": "core.routing.channel_routing",
+#     },
+# }
 
 # DRF SPECTACULAR
 SPECTACULAR_SETTINGS = {

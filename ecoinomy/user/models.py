@@ -5,12 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from ecoinomy.models import BaseModel
 from django.db.models import Q, CheckConstraint
+from phonenumber_field.modelfields import PhoneNumberField
 
-
-
-default_settings = dict(
-    add_similar_products_across_stores=True
-)
 
 class Gender(models.Choices):
     MALE = 'male'
@@ -19,7 +15,6 @@ class Gender(models.Choices):
     PREFER_NOT_TO_SAY = 'prefer_not_to_say'
 
 
-# Create your models here.
 class Profile(BaseModel):
     class Meta:
         db_table = "profile"
@@ -31,16 +26,15 @@ class Profile(BaseModel):
     first_name = models.CharField(max_length=128, blank=True, null=True)
     last_name = models.CharField(max_length=128, blank=True, null=True)
     email = models.EmailField("Email address", unique=True, max_length=128, blank=True, null=True)
-    phone_number = models.CharField(max_length=50, blank=True, null=True)
-    country = CountryField(max_length=255, null=True, blank=True, default="Australia")
-    nationality = CountryField(max_length=255, null=True, blank=True, default="Australia")
+    phone_number = PhoneNumberField(blank=True)
+    country_of_residence = CountryField(max_length=255, null=True, blank=True, default="CA")
+    nationality = CountryField(max_length=255, null=True, blank=True, default="CA")
     city = models.CharField(max_length=255, null=True, blank=True, default="")
     address = models.CharField(max_length=255, null=True, blank=True, default="")
     postcode = models.CharField(max_length=15, verbose_name="Postcode/ Zipcode", null=True, blank=True, default="")
     date_of_birth = models.DateTimeField(blank=True, null=True)
     gender = models.CharField(max_length=255, choices=Gender.choices, null=True, blank=True)
     display_picture = models.FileField(upload_to="profile_media", blank=True, null=True)
-    prefrences = models.JSONField(default=default_settings)
 
     class Meta:
         constraints = [
@@ -92,7 +86,6 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
         },
     )
     email = models.EmailField("Email address", unique=True, null=True, blank=True)
-    # location = models.PointField(geography=True, blank=True, null=True)
 
     # Permissions
     is_active = models.BooleanField("Is active", default=True)
@@ -116,3 +109,10 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
     @property
     def is_staff(self):
         return True
+    
+
+class ProfileSocial(BaseModel):
+    profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="social_platform_links")
+    link = models.URLField(max_length=500)
+    social_platform = models.CharField(max_length=50)

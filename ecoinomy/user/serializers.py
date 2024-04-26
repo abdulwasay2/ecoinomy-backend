@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from user.models import User, Profile
 from django_countries.serializer_fields import CountryField
-
-
+from phonenumber_field.serializerfields import PhoneNumber
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,23 +11,23 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    # user = UserSerializer(read_only=True)
     country = CountryField(required=False)
     nationality = CountryField(required=False)
+    phone_number = PhoneNumber()
 
     class Meta:
         model = Profile
         fields = '__all__'
-        read_only_fields = ("id", "user", "email", "created_at", "updated_at")
+        read_only_fields = ("id", "user", "email", "phone_number", "created_at", "updated_at")
 
 
-# class UserSerializer(serializers.ModelSerializer):
-    # profile = ProfileSerializer(required=False)
-    # email = serializers.EmailField(required=False)
-    # phone_number = serializers.EmailField(required=False)
-    # class Meta:
-    #     model = Profile
-    #     fields = '__all__'
+class UserDetailSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(required=False)
+    email = serializers.EmailField(required=False)
+    class Meta:
+        model = User
+        fields = ["profile", "email", "username"]
 
     # def create(self, *args, **kwargs):
     #     profile_data = self.validated_data.get("profile", None)
@@ -59,7 +58,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     #         return {"message": "Otp send to user email or phone number"}
     #     else:
     #         raise serializers.ValidationError({"error": "email or phone_number. atleast one field is required"})
-
     
 
 class UserPasswordChangeSerializer(serializers.Serializer):
