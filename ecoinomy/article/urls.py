@@ -8,8 +8,8 @@ router = DefaultRouter()
 
 router.register(r"", views.ArticleViewSet, basename='article-views')
 router.register(r"article_author", views.ArticleAuthorViewSet, basename="article_author")
-router.register(r"article_views", views.ArticleViewsViewSet, basename="article_author")
-router.register(r"snippet", views.SnippetViewSet, basename="article_author")
+router.register(r"article_views", views.ArticleViewsViewSet, basename="article")
+router.register(r"snippet", views.SnippetViewSet, basename="snippet")
 
 
 urlpatterns = [
