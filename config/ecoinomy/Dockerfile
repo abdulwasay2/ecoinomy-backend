@@ -7,7 +7,7 @@ ENV PYTHONUNBUFFERED 1
 
 # Creating and putting configurations
 RUN mkdir /config
-ADD config/chat-app /config/
+ADD config/ecoinomy/ /config/
 
 # Installing all python dependencies
 #COPY /config/requirements.txt /config/
@@ -26,6 +26,6 @@ CMD ["sh", "/config/on-container-start.sh"]
 
 # Creating and putting application inside container
 # and setting it to working directory (meaning it is going to be default)
-RUN mkdir /chat_app
-WORKDIR /chat_app
-ADD chat_app /chat_app/
+RUN mkdir /ecoinomy
+WORKDIR /ecoinomy
+ADD ecoinomy /ecoinomy/

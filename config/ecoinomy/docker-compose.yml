@@ -10,22 +10,23 @@ services:
     networks:
       - backend-network
     environment:
-      - POSTGRES_USER=django_traefik
-      - POSTGRES_PASSWORD=django_traefik
-      - POSTGRES_DB=django_traefik
+      - POSTGRES_USER=eco_user
+      - POSTGRES_PASSWORD=ecoo@123
+      - POSTGRES_DB=eco_db
   
   app:
-    container_name: chat-app
+    container_name: ecoinomy-backend-app
+    restart: unless-stopped
     build:
-      context: .
-      dockerfile: config/chat-app/Dockerfile
-    image: chat-app-image:latest
+      context: ../../
+      dockerfile: config/ecoinomy/Dockerfile
+    image: ecoinomy-backend-app:latest
     command: >
       bash -c "
-      python manage.py migrate; uvicorn --host 0.0.0.0 --port 8000 --reload --proxy-headers chat_app.asgi:application"
-    hostname: chat_app
+      python manage.py migrate; uvicorn --host 0.0.0.0 --port 8000 --reload --proxy-headers ecoinomy.asgi:application"
+    # hostname: chat_app
     volumes:
-      - ./chat_app:/chat_app
+      - .:/app
       - static:/srv/static
       - media:/srv/media
     networks:
@@ -34,24 +35,25 @@ services:
       - redis
     depends_on:
       - db
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`django.localhost`)"
-      # - "traefik.http.services.app.loadbalancer.server.port=8000"
-      # - "traefik.http.routers.app.tls=true"
-      # - "traefik.http.routers.app.tls.certresolver=letsencrypt"
+    ports:
+      - "8000:8000"
     env_file:
       - dev.env
 
 
   # celery:
-  #   container_name: chat-app-booking
-  #   image: chat-app-image:latest
-  #   command: celery -A chat_app worker -l info
+  #   container_name: ecoinomy-backend-celery-worker
+  #   restart: unless-stopped
+  #   image: ecoinomy-backend-app:latest
+  #   command: celery -A ecoinomy worker -l info
+  #   build:
+  #     context: ../../
+  #     dockerfile: config/ecoinomy/Dockerfile
   #   volumes:
-  #     - ./chat_app:/chat_app
+  #     - .:/app
   #   depends_on:
   #     - app
+  #     - redis
   #   networks:
   #     - backend-network
   #   links:
@@ -59,6 +61,7 @@ services:
   #   env_file:
   #     - dev.env
   
+
   # celery-beat:
   #   container_name: chat-app-beat-booking
   #   image: chat-app-image:latest
@@ -74,36 +77,37 @@ services:
   #   env_file:
   #     - dev.env
 
-  traefik:
-    image: traefik:latest
-    container_name: traefik
-    ports:
-      - target: 80
-        published: 80
-        mode: host
-      - target: 443
-        published: 443
-        mode: host
-      - target: 8080
-        published: 8080
-        mode: host
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./config/traefik/acme.json:/acme.json"
-      - "./config/traefik/traefik.dev.toml:/etc/traefik/traefik.toml"
-    depends_on:
-      - app
-    networks:
-      - backend-network
+  # traefik:
+  #   image: traefik:latest
+  #   container_name: traefik
+  #   ports:
+  #     - target: 80
+  #       published: 80
+  #       mode: host
+  #     - target: 443
+  #       published: 443
+  #       mode: host
+  #     - target: 8080
+  #       published: 8080
+  #       mode: host
+  #   volumes:
+  #     - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  #     - "./config/traefik/acme.json:/acme.json"
+  #     - "./config/traefik/traefik.dev.toml:/etc/traefik/traefik.toml"
+  #   depends_on:
+  #     - app
+  #   networks:
+  #     - backend-network
 
   redis:
-    container_name: chat-app-redis-booking
+    container_name: ecoinomy-app-redis
     image: bitnami/redis:latest
     hostname: redis
     expose:
       - 6379
     environment:
-      - REDIS_PASSWORD=redis
+      # - REDIS_PASSWORD=redis
+      - ALLOW_EMPTY_PASSWORD=yes
     networks:
       - backend-network
   
@@ -118,6 +122,8 @@ services:
   #     - ./config/nginx/development:/etc/nginx/conf.d
   #     - static:/srv/static:ro
   #     - media:/srv/media:ro
+  #     - ./certbot/conf:/etc/letsencrypt
+  #     - ./certbot/www:/var/www/certbot
   #   depends_on:
   #     - app
   #   networks:
