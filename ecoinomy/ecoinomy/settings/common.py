@@ -166,6 +166,10 @@ AWS_SES_ACCESS_KEY_ID = env("AWS_SES_ACCESS_KEY_ID")
 AWS_SES_SECRET_ACCESS_KEY = env("AWS_SES_SECRET_ACCESS_KEY")
 FROM_EMAIL = env("AWS_SES_FROM_EMAIL")
 
+# Text Magic configs
+TEXTMAGIC_USERNAME = env("TEXTMAGIC_USERNAME")
+TEXTMAGIC_PASSWORD = env("TEXTMAGIC_PASSWORD")
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

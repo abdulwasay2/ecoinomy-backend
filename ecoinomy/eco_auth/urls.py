@@ -15,4 +15,4 @@ urlpatterns = [
     path('password/reset/', PasswordResetView.as_view(), name='password_reset'),
     path('password/reset/confirm/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('token_refresh/', get_refresh_view().as_view(), name="token_refresh"),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

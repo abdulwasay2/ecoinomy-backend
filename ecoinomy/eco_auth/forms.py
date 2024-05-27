@@ -64,9 +64,10 @@ class PasswordResetForm(BasePasswordResetForm):
         # message = render_to_string(email_template_name, context).strip()
         # message = f"Hello you can reset the password by clicking this link {context.get('reset_link')}"
         message = f"Hello you can reset the password using this key {context.get('code')}"
+        print(message)
         send_mail(
             recipient_list=to,
-            from_email=settings.AWS_SES_FROM_EMAIL,
+            from_email=settings.FROM_EMAIL,
             message=message,
             # html_message=message,
             # template_prefix=template_prefix,

@@ -8,6 +8,8 @@ from django.utils.crypto import constant_time_compare, salted_hmac
 from pyotp import TOTP
 from django.core.mail import send_mail
 
+from ecoinomy.utils import send_text_message_text_magic
+
 
 class UserTokenGenerator(PasswordResetTokenGenerator):
     """
@@ -62,9 +64,14 @@ def phone_number_exists(phone_number):
 
 def get_user_by_email_phone_number(email=None, phone_number=None):
     users = get_user_model().objects
-    # ret = users.filter(Q(phone_number__iexact=phone_number) | Q(email__iexact=email))
-    ret = users.filter(Q(email__iexact=email))
-    return ret.first()
+    ret = None
+    if email and phone_number:
+        ret = users.filter(Q(profile__phone_number__iexact=phone_number) | Q(email__iexact=email)).first()
+    elif email:
+        ret = users.filter(email__iexact=email).first()
+    elif phone_number:
+        ret = users.filter(profile__phone_number__iexact=phone_number).first()
+    return ret
 
 
 def generate_otp(secret=settings.OTP_SECRET_KEY, interval=300):
@@ -75,7 +82,7 @@ def send_login_otp_to_user(email=None, phone_number=None):
     subject = "Ecoinomy Login OTP"
     code = generate_otp().now()
     message = f"Your one time passcode for login is {code}"
-    message 
+    print(message) 
     if email:
         send_mail(
             subject,
@@ -85,7 +92,7 @@ def send_login_otp_to_user(email=None, phone_number=None):
         )
 
     if phone_number:
-        pass
+        send_text_message_text_magic(subject + "\n" + message, [phone_number])
 
 
 user_token_generator = UserTokenGenerator()

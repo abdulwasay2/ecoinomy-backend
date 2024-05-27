@@ -20,13 +20,11 @@ class UserViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
            : id is the id of the existing user object 
     """
     serializer_class = ProfileSerializer
-    permission_classes = (AllowAny,)
-
-    def get_object(self):
-        return get_object_or_404(self.get_queryset(), id=1)
+    permission_classes = (IsAuthenticated,)
     
     def get_queryset(self):
-        return Profile.objects.filter(user_id=1)
+        current_user = self.request.user
+        return Profile.objects.filter(user=current_user)
     
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -44,13 +42,11 @@ class ProfileViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewset
     """
 
     serializer_class = ProfileSerializer
-    permission_classes = (AllowAny,)
-
-    def get_object(self):
-        return get_object_or_404(self.get_queryset(), id=1)
+    permission_classes = (IsAuthenticated,)
     
     def get_queryset(self):
-        return Profile.objects.filter(user_id=1)
+        current_user = self.request.user
+        return Profile.objects.filter(user=current_user)
     
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

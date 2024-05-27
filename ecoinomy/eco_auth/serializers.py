@@ -3,7 +3,7 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 from django.utils.encoding import force_str
-from phonenumber_field.serializerfields import PhoneNumber
+from phonenumber_field.serializerfields import PhoneNumberField
 from dj_rest_auth.serializers import (
     PasswordResetSerializer as BasePasswordResetSerializer,
     PasswordResetConfirmSerializer as BasePasswordResetConfirmSerializer,
@@ -23,7 +23,8 @@ except ImportError:
 
 class CustomRegisterSerializers(RegisterSerializer):
     email = serializers.EmailField(required=False)
-    phone_number = PhoneNumber()
+    phone_number = PhoneNumberField(required=False)
+    username = None
     password1 = None
     password2 = None
 
@@ -42,7 +43,8 @@ class CustomRegisterSerializers(RegisterSerializer):
         self.cleaned_data = self.get_cleaned_data()
         user = adapter.save_user(request, user, self)
         self.custom_signup(request, user)
-        setup_user_email(request, user, [])
+        if user.email:
+            setup_user_email(request, user, [])
         return user
     
 

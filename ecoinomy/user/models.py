@@ -108,7 +108,10 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
 
     @property
     def is_staff(self):
-        return True
+        if self.is_superuser:
+            return True
+        else:
+            return False
     
 
 class ProfileSocial(BaseModel):

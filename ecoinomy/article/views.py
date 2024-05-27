@@ -12,12 +12,12 @@ class ArticleViewSet(ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['retrieve', 'list']:
-            return (permissions.IsAuthenticated,)
+            return [permissions.IsAuthenticated()]
         return super().get_permissions()
 
     def get_object(self):
         instance = super().get_object()
-        if self.action in ['retrieve']:
+        if self.action in ['retrieve'] and not self.request.user.is_superuser:
             ArticleViews.objects.get_or_create(
                 article_id=instance.id,
                 user_id=self.request.user.id
@@ -32,7 +32,7 @@ class ArticleAuthorViewSet(ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['retrieve', 'list']:
-            return (permissions.IsAuthenticated,)
+            return [permissions.IsAuthenticated()]
         return super().get_permissions()
 
 
@@ -54,5 +54,5 @@ class SnippetViewSet(ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['retrieve', 'list']:
-            return (permissions.IsAuthenticated,)
+            return [permissions.IsAuthenticated()]
         return super().get_permissions()

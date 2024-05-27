@@ -33,9 +33,8 @@ class CustomRegisterView(RegisterView):
         data = request.data
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        if email_address_exists(data.get("email")):
-            user = get_user_by_email_phone_number(**serializer.data)
-        else:
+        user = get_user_by_email_phone_number(**serializer.data)
+        if not user:
             user = self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         data = self.get_response_data(user)
