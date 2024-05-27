@@ -1,36 +1,46 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, mixins, status
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 
 from user.serializers import (
     UserSerializer, 
     ProfileSerializer,
     User,
-    Profile
+    Profile,
+    UserPasswordChangeSerializer
 )
 from user import helpers as user_helper
 
 
-class UserViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     """
     Viewset for performing crud operations on the 
     logged in user entity \n
     :route params \n
            : id is the id of the existing user object 
     """
-    serializer_class = ProfileSerializer
-    permission_classes = (IsAuthenticated,)
-    
-    def get_queryset(self):
-        current_user = self.request.user
-        return Profile.objects.filter(user=current_user)
-    
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
-    
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    queryset = User.objects.all()
+
+    def get_serializer_class(self):
+        if self.action in ["change_password"]:
+            return UserPasswordChangeSerializer
+        return super().get_serializer_class()
+
+    @action(methods=["POST"], detail=False)
+    def change_password(self, request):
+        serialized = self.get_serializer(data=request.data)
+        serialized.is_valid(raise_exception=True)
+        current_user = request.user
+        if current_user.check_password(serialized.validated_data.get("old_password")):
+            current_user.set_password(serialized.validated_data.get("new_password"))
+            current_user.save()
+        else:
+            raise ValidationError(detail="The old password doesn't match")
+
 
 class ProfileViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """

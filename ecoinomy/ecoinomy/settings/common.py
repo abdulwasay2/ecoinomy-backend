@@ -57,7 +57,8 @@ LOCAL_APPS = [
     "user",
     "eco_auth",
     "category",
-    "article"
+    "article",
+    "dashboard_stats"
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS

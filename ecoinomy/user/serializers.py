@@ -4,12 +4,6 @@ from django_countries.serializer_fields import CountryField
 from phonenumber_field.serializerfields import PhoneNumber
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
-
-
 class ProfileSerializer(serializers.ModelSerializer):
     # user = UserSerializer(read_only=True)
     country = CountryField(required=False)
@@ -59,6 +53,38 @@ class UserDetailSerializer(serializers.ModelSerializer):
     #     else:
     #         raise serializers.ValidationError({"error": "email or phone_number. atleast one field is required"})
     
+
+class UserSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(required=False)
+    class Meta:
+        model = User
+        fields = '__all__'
+        # extra_kwargs = {
+        #     "email": {"required": True},
+        #     "password": {"required": True}
+        # }
+
+    def create(self, validated_data):
+        profile_data = validated_data.pop("profile", None)
+        password = validated_data.pop("password", None)
+        user = super().create(validated_data)
+        user.set_password(password)
+        user.save()
+        profile = Profile.objects.create(user=user)
+        if profile_data:
+            profile.update(profile_data)
+            profile.save()
+        return user
+    
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop("profile", None)
+        password = validated_data.pop("password", None)
+        profile = instance.profile
+        if profile_data:
+            profile.update(profile_data)
+            profile.save()
+        return super().update(instance, validated_data)
+
 
 class UserPasswordChangeSerializer(serializers.Serializer):
 
