@@ -12,7 +12,8 @@ ADD config/ecoinomy/ /config/
 # Installing all python dependencies
 #COPY /config/requirements.txt /config/
 RUN apt-get update && apt-get install -y \
-    gnupg2 gdal-bin binutils libproj-dev libgdal-dev ca-certificates gnupg2 libmagickwand-dev poppler-utils wget && rm -rf /var/lib/apt/lists/*
+    gnupg2 gdal-bin binutils libproj-dev libgdal-dev ca-certificates gnupg2 libmagickwand-dev poppler-utils wget && rm -rf /var/lib/apt/lists/* \
+    && apt-get install -y --no-install-recommends git
 RUN pip install --upgrade pip && pip install -r /config/requirements.txt
 
 # Open port 8000 to outside world
