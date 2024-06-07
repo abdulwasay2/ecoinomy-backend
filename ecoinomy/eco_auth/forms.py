@@ -67,7 +67,7 @@ class PasswordResetForm(BasePasswordResetForm):
         print(message)
         send_mail(
             recipient_list=to,
-            from_email=settings.FROM_EMAIL,
+            from_email=settings.DEFAULT_FROM_EMAIL,
             message=message,
             # html_message=message,
             # template_prefix=template_prefix,
