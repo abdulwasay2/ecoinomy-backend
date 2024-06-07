@@ -87,7 +87,7 @@ def send_login_otp_to_user(email=None, phone_number=None):
         send_mail(
             subject,
             message,
-            settings.FROM_EMAIL,
+            settings.DEFAULT_FROM_EMAIL,
             [email]
         )
 
