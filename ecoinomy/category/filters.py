@@ -6,4 +6,4 @@ class CategoryFilter(filters.FilterSet):
 
     class Meta:
         model = Category
-        fields = "__all__"
+        fields = ["parent_category", "name", "is_active"]
