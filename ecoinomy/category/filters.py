@@ -3,7 +3,7 @@ from .models import Category
 
 
 class CategoryFilter(filters.FilterSet):
-    is_parent = filters.CharFilter(method='is_parent')
+    is_parent = filters.BooleanFilter(method='is_parent')
 
     class Meta:
         model = Category
