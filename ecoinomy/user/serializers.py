@@ -2,6 +2,7 @@ from rest_framework import serializers
 from user.models import User, Profile
 from django_countries.serializer_fields import CountryField
 from phonenumber_field.serializerfields import PhoneNumber
+from drf_extra_fields.fields import Base64ImageField
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -9,6 +10,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     country = CountryField(required=False)
     nationality = CountryField(required=False)
     phone_number = PhoneNumber()
+    display_picture = Base64ImageField(required=False)
 
     class Meta:
         model = Profile

@@ -44,7 +44,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
             )
         ).order_by("-view_count")[:5]
         serializer = self.get_serializer(categories, many=True)
-        return Response(data=serializer.data)
+        return Response(data={"data": serializer.data})
 
 
 class CarouselViewSet(viewsets.ModelViewSet):

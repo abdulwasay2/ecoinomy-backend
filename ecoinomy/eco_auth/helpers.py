@@ -21,7 +21,7 @@ class UserTokenGenerator(PasswordResetTokenGenerator):
 
     KEY_SALT = "django.contrib.auth.tokens.PasswordResetTokenGenerator"
     SECRET = settings.SECRET_KEY
-    EXPIRY_TIME = 60 * 15
+    EXPIRY_TIME = 60 * int(settings.LOGIN_OTP_EXPIRATION_MINS)
 
     def make_token(self, user):
         return self._make_token_with_timestamp(user, int(timezone.datetime.now().timestamp()))
@@ -74,7 +74,7 @@ def get_user_by_email_phone_number(email=None, phone_number=None):
     return ret
 
 
-def generate_otp(secret=settings.OTP_SECRET_KEY, interval=300):
+def generate_otp(secret=settings.OTP_SECRET_KEY, interval=60 * int(settings.LOGIN_OTP_EXPIRATION_MINS)):
     return TOTP(secret, interval=interval)
 
 
@@ -87,7 +87,7 @@ def send_login_otp_to_user(email=None, phone_number=None):
         send_mail(
             subject,
             message,
-            settings.FROM_EMAIL,
+            settings.DEFAULT_FROM_EMAIL,
             [email]
         )
 
