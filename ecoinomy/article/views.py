@@ -5,13 +5,14 @@ from rest_framework.filters import OrderingFilter
 
 from article.serializers import ArticleSerializer, ArticleAuthorSerializer, ArticleViewsSerializer, SnippetSerializer
 from article.models import Article, ArticleViews, ArticleAuthor, Snippet
+from article.filters import ArticleFilter
 
 
 class ArticleViewSet(ModelViewSet):
     serializer_class = ArticleSerializer
     filter_backends = [OrderingFilter, DjangoFilterBackend]
-    filterset_class = CategoryFilter
-    ordering_fields = ['name', 'created_at']
+    filterset_class = ArticleFilter
+    ordering_fields = ['heading', 'created_at']
     permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
     queryset = Article.objects.all()
 
