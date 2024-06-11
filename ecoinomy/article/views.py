@@ -1,5 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status, permissions
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
 
 from article.serializers import ArticleSerializer, ArticleAuthorSerializer, ArticleViewsSerializer, SnippetSerializer
 from article.models import Article, ArticleViews, ArticleAuthor, Snippet
@@ -7,6 +9,9 @@ from article.models import Article, ArticleViews, ArticleAuthor, Snippet
 
 class ArticleViewSet(ModelViewSet):
     serializer_class = ArticleSerializer
+    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filterset_class = CategoryFilter
+    ordering_fields = ['name', 'created_at']
     permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
     queryset = Article.objects.all()
 
