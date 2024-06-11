@@ -17,3 +17,9 @@ class StoreAdmin(admin.ModelAdmin):
 class StoreAdmin(admin.ModelAdmin):
     list_display = ["id", "heading", "code", "description", "status"]
     list_display_links = ["heading"]
+
+
+@admin.register(ArticleAuthor)
+class ArticleAuthorAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "profession", "work_place"]
+    list_display_links = ["name"]
