@@ -3,7 +3,15 @@ from category.models import Category, CarousalItem
 from article.serializers import ArticleSerializer
 
 
+class SubCategoryNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'is_active']
+
+
 class CategorySerializer(serializers.ModelSerializer):
+    sub_categories = SubCategoryNameSerializer(required=False, many=True)
+    
     class Meta:
         model = Category
         fields = '__all__'
