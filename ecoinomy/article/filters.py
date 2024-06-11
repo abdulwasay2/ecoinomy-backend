@@ -6,7 +6,7 @@ from .models import Article
 
 class ArticleFilter(filters.FilterSet):
     created = filters.DateFromToRangeFilter(label='Created Date Range')
-    heading = filters.CharField(lookup_expr='icontains')
+    heading = filters.CharFilter(lookup_expr='icontains')
     sub_category = filters.NumberFilter(method="filter_by_category_id")
 
     class Meta:
