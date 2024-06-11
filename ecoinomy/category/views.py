@@ -3,6 +3,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
 from django.db.models import Count, Prefetch, Subquery
 
 from category.serializers import (
@@ -12,12 +14,16 @@ from category.serializers import (
 )
 from category.models import Category, CarousalItem
 from article.models import Article
+from category.filters import CategoryFilter
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """"""
 
     serializer_class = CategorySerializer
+    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filterset_class = CategoryFilter
+    ordering_fields = ['name', 'created_at']
     permission_classes = (IsAuthenticated, IsAdminUser)
     queryset = Category.objects.all()
 
