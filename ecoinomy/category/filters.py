@@ -3,12 +3,8 @@ from .models import Category
 
 
 class CategoryFilter(filters.FilterSet):
-    is_parent = filters.BooleanFilter(method='is_parent')
+    is_parent = filters.BooleanFilter(field_name='parent_category', lookup_expr='isnull')
 
     class Meta:
         model = Category
-        fields = ["parent_category", "name", "is_active", "is_parent"]
-
-    @staticmethod
-    def is_parent(queryset, name, value):
-        return queryset.filter(parent_category__isnull=value)
+        fields = ["parent_category", "name", "is_active"]
