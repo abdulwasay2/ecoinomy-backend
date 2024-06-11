@@ -11,7 +11,7 @@ class ArticleFilter(filters.FilterSet):
 
     class Meta:
         model = Article
-        fields = ["sub_category", "heading", "is_active", "article_type", "article_by", "created"]
+        fields = ["sub_category", "heading", "article_type", "article_by", "created"]
 
     @staticmethod
     def filter_by_category_id(queryset, name, value):
