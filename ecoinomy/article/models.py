@@ -4,8 +4,8 @@ from ecoinomy.models import BaseModel
 
 
 class ArticleType(models.Choices):
-    OPINION = 'opinion'
-    ANALYSIS = 'analysis'
+    OPINION = 'Opinion'
+    ANALYSIS = 'Analysis'
 
 
 class ArticleAuthor(BaseModel):
