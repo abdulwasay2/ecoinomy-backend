@@ -7,15 +7,15 @@ from drf_extra_fields.fields import Base64ImageField
 
 class ProfileSerializer(serializers.ModelSerializer):
     # user = UserSerializer(read_only=True)
-    country = CountryField(required=False)
-    nationality = CountryField(required=False)
-    phone_number = PhoneNumber()
+    # country = CountryField(required=False)
+    # nationality = CountryField(required=False)
+    # phone_number = PhoneNumber()
     display_picture = Base64ImageField(required=False)
 
     class Meta:
         model = Profile
         fields = '__all__'
-        read_only_fields = ("id", "user", "email", "phone_number", "created_at", "updated_at")
+        read_only_fields = ("id", "user", "email", "created_at", "updated_at")
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
