@@ -15,7 +15,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 @admin.register(Snippet)
 class SnippetAdmin(admin.ModelAdmin):
-    list_display = ["id", "heading", "description", "status"]
+    list_display = ["id", "heading", "body", "country"]
     list_display_links = ["heading"]
 
 
