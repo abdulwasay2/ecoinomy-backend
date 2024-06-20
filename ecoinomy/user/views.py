@@ -7,6 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 
 from user.serializers import (
+    UserListSerializer,
     UserSerializer, 
     ProfileSerializer,
     User,
@@ -34,6 +35,8 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action in ["change_password"]:
             return UserPasswordChangeSerializer
+        if self.action in ["list"]:
+            return UserListSerializer
         return super().get_serializer_class()
 
     @action(methods=["POST"], detail=False)

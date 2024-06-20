@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from dj_rest_auth.registration.views import RegisterView
-from rest_framework import status, permissions
+from rest_framework import status, permissions, viewsets, mixins
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
@@ -10,7 +10,8 @@ from dj_rest_auth.serializers import JWTSerializer
 
 from eco_auth.helpers import phone_number_exists, get_user_by_email_phone_number, \
     user_token_generator, send_login_otp_to_user, generate_otp
-from .serializers import CustomRegisterSerializers, OTPVerifySerializer
+from .serializers import CustomRegisterSerializers, OTPVerifySerializer, \
+    GroupSerializer, Group, PermissionSerializer, Permission
 
 
 class CustomRegisterView(RegisterView):
@@ -72,3 +73,17 @@ class VerifyOTPView(CreateAPIView):
         }
         serializer = JWTSerializer(data, context=self.get_serializer_context())
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+
+    serializer_class = GroupSerializer
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    queryset = Group.objects.all()
+
+
+class PermissionViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+
+    serializer_class = GroupSerializer
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    queryset = Permission.objects.all()

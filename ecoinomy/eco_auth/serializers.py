@@ -10,10 +10,11 @@ from dj_rest_auth.serializers import (
     UserModel,
 )
 from django.conf import settings
+from django.contrib.auth.models import Permission
 
 from eco_auth.helpers import generate_otp
 from eco_auth.forms import PasswordResetForm
-
+from eco_auth.models import Group
 
 try:
     from allauth.account import app_settings as allauth_settings
@@ -100,3 +101,26 @@ class CustomPasswordResetConfirmSerializer(BasePasswordResetConfirmSerializer):
             raise serializers.ValidationError(self.set_password_form.errors)
 
         return attrs
+    
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = "__all__"
+
+
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = "__all__"
+
+
+class UserGroupSerializer(serializers.ModelSerializer):
+    permissions = PermissionSerializer(many=True)
+
+    class Meta:
+        model = Group
+        fields = "__all__"
+
+
+from django.utils import timezone

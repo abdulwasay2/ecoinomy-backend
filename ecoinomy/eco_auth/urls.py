@@ -1,10 +1,17 @@
-from django.urls import path
+from django.urls import path, re_path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from dj_rest_auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetConfirmView
 from dj_rest_auth.jwt_auth import get_refresh_view
+from rest_framework.routers import DefaultRouter
 
-from .views import CustomRegisterView, VerifyOTPView
+from .views import CustomRegisterView, VerifyOTPView, GroupViewSet, PermissionViewSet
+
+
+router = DefaultRouter()
+
+router.register(r"groups", GroupViewSet, basename='groups')
+router.register(r"permissions", PermissionViewSet, basename='permissions')
 
 
 urlpatterns = [
@@ -15,4 +22,6 @@ urlpatterns = [
     path('password/reset/', PasswordResetView.as_view(), name='password_reset'),
     path('password/reset/confirm/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('token_refresh/', get_refresh_view().as_view(), name="token_refresh"),
+
+    re_path("", include(router.urls)),
 ]

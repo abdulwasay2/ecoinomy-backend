@@ -4,6 +4,8 @@ from django_countries.serializer_fields import CountryField
 from phonenumber_field.serializerfields import PhoneNumber
 from drf_extra_fields.fields import Base64ImageField
 
+from eco_auth.serializers import UserGroupSerializer
+
 
 class ProfileSerializer(serializers.ModelSerializer):
     # user = UserSerializer(read_only=True)
@@ -21,9 +23,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer(required=False)
     email = serializers.EmailField(required=False)
+    groups = UserGroupSerializer(many=True, required=False)
     class Meta:
         model = User
-        fields = ["profile", "email", "username"]
+        fields = ["profile", "email", "username", "groups"]
 
     # def create(self, *args, **kwargs):
     #     profile_data = self.validated_data.get("profile", None)
@@ -89,6 +92,13 @@ class UserSerializer(serializers.ModelSerializer):
             profile.update(profile_data)
             profile.save()
         return super().update(instance, validated_data)
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(required=False)
+    class Meta:
+        model = User
+        fields = '__all__'
 
 
 class UserPasswordChangeSerializer(serializers.Serializer):
