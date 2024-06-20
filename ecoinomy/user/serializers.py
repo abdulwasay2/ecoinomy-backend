@@ -72,7 +72,10 @@ class UserSerializer(serializers.ModelSerializer):
         user = super().create(validated_data)
         user.set_password(password)
         user.save()
-        profile = Profile.objects.create(user=user)
+        profile = Profile.objects.create(
+            user=user,
+            email=user.email
+            )
         if profile_data:
             profile.update(profile_data)
             profile.save()

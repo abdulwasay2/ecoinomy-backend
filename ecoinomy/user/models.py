@@ -93,6 +93,7 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
     # Permissions
     is_active = models.BooleanField("Is active", default=True)
     is_superuser = models.BooleanField("Is admin", default=False)
+    is_staff = models.BooleanField("Is staff", default=False)
     has_completed_registration = models.BooleanField(default=False)
 
     # Meta
@@ -108,13 +109,6 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return str(self.id)
-
-    @property
-    def is_staff(self):
-        if self.is_superuser:
-            return True
-        else:
-            return False
     
 
 class ProfileSocial(BaseModel):

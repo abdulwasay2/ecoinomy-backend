@@ -3,6 +3,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
 
 from user.serializers import (
     UserSerializer, 
@@ -12,6 +14,7 @@ from user.serializers import (
     UserPasswordChangeSerializer
 )
 from user import helpers as user_helper
+from user.filters import UserFilter
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -22,6 +25,9 @@ class UserViewSet(viewsets.ModelViewSet):
            : id is the id of the existing user object 
     """
     serializer_class = UserSerializer
+    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filterset_class = UserFilter
+    ordering_fields = ['email', 'created_at']
     permission_classes = (IsAuthenticated, IsAdminUser)
     queryset = User.objects.all()
 
