@@ -17,6 +17,7 @@ class ArticleAuthor(BaseModel):
 class Article(BaseModel):
     media = models.FileField(upload_to="article_image/", blank=True, null=True)
     heading = models.CharField(max_length=255)
+    secondary_heading = models.CharField(max_length=255)
     body = models.TextField()
     body_in_second_language = models.TextField(blank=True)
     sub_category = models.ForeignKey('category.Category', on_delete=models.CASCADE, related_name="articles")
@@ -26,6 +27,7 @@ class Article(BaseModel):
     estimated_time_to_read = models.DurationField(null=True)
     article_type = models.CharField(max_length=256, choices=ArticleType.choices)
     country = CountryField(max_length=255, null=True, blank=True, default="CA")
+    is_active = models.BooleanField(default=True)
 
 
 class ArticleViews(BaseModel):
@@ -38,3 +40,4 @@ class Snippet(BaseModel):
     body = models.TextField()
     sub_category = models.ForeignKey('category.Category', on_delete=models.CASCADE, related_name="snippets")
     country = CountryField(max_length=255, null=True, blank=True, default="CA")
+    is_active = models.BooleanField(default=True)

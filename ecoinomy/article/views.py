@@ -1,10 +1,13 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status, permissions
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
+from rest_framework.decorators import action
+from django_countries import countries
 
 from article.serializers import ArticleSerializer, ArticleAuthorSerializer, ArticleViewsSerializer, SnippetSerializer
-from article.models import Article, ArticleViews, ArticleAuthor, Snippet
+from article.models import Article, ArticleType, ArticleViews, ArticleAuthor, Snippet
 from article.filters import ArticleFilter
 
 
@@ -29,6 +32,14 @@ class ArticleViewSet(ModelViewSet):
                 user_id=self.request.user.id
             )
         return instance
+    
+    @action(methods=["GET"], detail=False)
+    def get_article_types(self, request, *args, **kwargs):
+        return Response(data={"types": ArticleType.choices})
+    
+    @action(methods=["GET"], detail=False)
+    def get_countries(self, request, *args, **kwargs):
+        return Response(data={"countries": list(countries)})
 
 
 class ArticleAuthorViewSet(ModelViewSet):
