@@ -47,6 +47,10 @@ class CustomRegisterSerializers(RegisterSerializer):
             setup_user_email(request, user, [])
         return user
     
+    def get_cleaned_data(self):
+        ret = super().get_cleaned_data()
+        ret.update({"email": self.validated_data.get('email'),})
+        return ret
 
 class OTPVerifySerializer(serializers.Serializer):
 
