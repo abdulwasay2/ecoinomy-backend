@@ -47,6 +47,7 @@ class UserViewSet(viewsets.ModelViewSet):
         if current_user.check_password(serialized.validated_data.get("old_password")):
             current_user.set_password(serialized.validated_data.get("new_password"))
             current_user.save()
+            return Response({"detail": "password changed successfully."})
         else:
             raise ValidationError(detail="The old password doesn't match")
 
