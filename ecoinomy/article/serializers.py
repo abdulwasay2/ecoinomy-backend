@@ -46,3 +46,10 @@ class ArticleSerializer(serializers.ModelSerializer):
             validated_data.update({"article_by_id": author.id})
         article = super().create(validated_data)
         return article
+    
+    def update(self, instance, validated_data):
+        author = validated_data.pop("article_by")
+        if author:
+            author, _ =ArticleAuthor.objects.get_or_create(**author)
+            validated_data.update({"article_by_id": author.id})
+        return super().update(instance, validated_data)
