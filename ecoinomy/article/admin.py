@@ -23,3 +23,8 @@ class SnippetAdmin(admin.ModelAdmin):
 class ArticleAuthorAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "profession", "work_place"]
     list_display_links = ["name"]
+
+
+@admin.register(ArticleViews)
+class ArticleViewsAdmin(admin.ModelAdmin):
+    list_display = ["id", "user", "article", "created_at"]
