@@ -16,9 +16,10 @@ from user.serializers import (
 )
 from user import helpers as user_helper
 from user.filters import UserFilter
+from ecoinomy.views import DefaultOrderingMixin
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(DefaultOrderingMixin, viewsets.ModelViewSet):
     """
     Viewset for performing crud operations on the 
     logged in user entity \n
@@ -52,7 +53,7 @@ class UserViewSet(viewsets.ModelViewSet):
             raise ValidationError(detail="The old password doesn't match")
 
 
-class ProfileViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class ProfileViewSet(DefaultOrderingMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     """
     Viewset for performing crud operations on the 
     logged in User Profile entity \n

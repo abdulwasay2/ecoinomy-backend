@@ -15,9 +15,10 @@ from category.serializers import (
 from category.models import Category, CarousalItem
 from article.models import Article
 from category.filters import CategoryFilter
+from ecoinomy.views import DefaultOrderingMixin
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(DefaultOrderingMixin, viewsets.ModelViewSet):
     """"""
 
     serializer_class = CategorySerializer
@@ -53,12 +54,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return Response(data={"data": serializer.data})
 
 
-class CarouselViewSet(viewsets.ModelViewSet):
+class CarouselViewSet(DefaultOrderingMixin, viewsets.ModelViewSet):
     """"""
 
     serializer_class = CarouselSerializer
     permission_classes = (IsAuthenticated, IsAdminUser)
-    queryset = CarousalItem.objects.all().order_by("id")
+    queryset = CarousalItem.objects.all()
 
     def get_permissions(self):
         if self.action in ["list", "retrieve"]:

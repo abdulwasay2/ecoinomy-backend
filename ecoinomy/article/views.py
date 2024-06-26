@@ -9,9 +9,10 @@ from django_countries import countries
 from article.serializers import ArticleSerializer, ArticleAuthorSerializer, ArticleViewsSerializer, SnippetSerializer
 from article.models import Article, ArticleType, ArticleViews, ArticleAuthor, Snippet
 from article.filters import ArticleFilter
+from ecoinomy.views import DefaultOrderingMixin
 
 
-class ArticleViewSet(ModelViewSet):
+class ArticleViewSet(DefaultOrderingMixin, ModelViewSet):
     serializer_class = ArticleSerializer
     filter_backends = [OrderingFilter, DjangoFilterBackend]
     filterset_class = ArticleFilter
@@ -42,7 +43,7 @@ class ArticleViewSet(ModelViewSet):
         return Response(data={"countries": list(countries)})
 
 
-class ArticleAuthorViewSet(ModelViewSet):
+class ArticleAuthorViewSet(DefaultOrderingMixin, ModelViewSet):
     serializer_class = ArticleAuthorSerializer
     permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
     queryset = ArticleAuthor.objects.all()
@@ -53,7 +54,7 @@ class ArticleAuthorViewSet(ModelViewSet):
         return super().get_permissions()
 
 
-class ArticleViewsViewSet(ModelViewSet):
+class ArticleViewsViewSet(DefaultOrderingMixin, ModelViewSet):
     serializer_class = ArticleViewsSerializer
     permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
     queryset = ArticleViews.objects.all()
@@ -64,7 +65,7 @@ class ArticleViewsViewSet(ModelViewSet):
         return super().get_permissions()
 
 
-class SnippetViewSet(ModelViewSet):
+class SnippetViewSet(DefaultOrderingMixin, ModelViewSet):
     serializer_class = SnippetSerializer
     permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
     queryset = Snippet.objects.all()
