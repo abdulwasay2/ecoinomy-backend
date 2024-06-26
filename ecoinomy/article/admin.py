@@ -28,3 +28,4 @@ class ArticleAuthorAdmin(admin.ModelAdmin):
 @admin.register(ArticleViews)
 class ArticleViewsAdmin(admin.ModelAdmin):
     list_display = ["id", "user", "article", "created_at"]
+    list_editable = ["user", "article", "created_at"]
