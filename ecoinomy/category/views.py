@@ -58,7 +58,7 @@ class CarouselViewSet(viewsets.ModelViewSet):
 
     serializer_class = CarouselSerializer
     permission_classes = (IsAuthenticated, IsAdminUser)
-    queryset = CarousalItem.objects.all()
+    queryset = CarousalItem.objects.all().order_by("id")
 
     def get_permissions(self):
         if self.action in ["list", "retrieve"]:
