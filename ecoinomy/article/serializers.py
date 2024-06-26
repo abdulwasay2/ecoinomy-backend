@@ -37,7 +37,8 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ["id", "media", "heading", "body", "body_in_second_language", "sub_category", "article_by",
-                  "views_count", "estimated_time_to_read", "article_type", "country", "sub_category_details"]
+                  "views_count", "estimated_time_to_read", "article_type", "country", "sub_category_details",
+                  "is_active"]
         
     def create(self, validated_data):
         author = validated_data.pop("article_by")
