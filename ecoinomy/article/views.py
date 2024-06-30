@@ -1,3 +1,4 @@
+import json
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status, permissions
 from rest_framework.response import Response
@@ -33,6 +34,17 @@ class ArticleViewSet(DefaultOrderingMixin, ModelViewSet):
                 user_id=self.request.user.id
             )
         return instance
+    
+    def create(self, request, *args, **kwargs):
+        if "multipart/form-data" in request.headers.get("Content-Type"):
+            article_by = json.loads(request.data.pop("article_by", ['{}'])[0])
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if "multipart/form-data" in request.headers.get("Content-Type"):
+            serializer.validated_data.update({"article_by": article_by})
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
     @action(methods=["GET"], detail=False)
     def get_article_types(self, request, *args, **kwargs):
