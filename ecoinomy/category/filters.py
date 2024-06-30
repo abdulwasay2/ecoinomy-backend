@@ -5,6 +5,7 @@ from .models import Category, CarousalItem
 class CategoryFilter(filters.FilterSet):
     is_parent = filters.BooleanFilter(field_name='parent_category', lookup_expr='isnull')
     created = filters.DateFromToRangeFilter(label='Created Date Range')
+    name = filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
         model = Category
