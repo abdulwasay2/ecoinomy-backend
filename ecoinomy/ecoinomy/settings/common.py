@@ -50,7 +50,8 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "django_filters",
     "django_countries",
-    "channels"
+    "channels",
+    "storages",
 ]
 
 LOCAL_APPS = [
@@ -227,7 +228,7 @@ SITE_ID = 1
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
