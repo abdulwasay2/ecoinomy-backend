@@ -14,7 +14,7 @@ from category.serializers import (
 )
 from category.models import Category, CarousalItem
 from article.models import Article
-from category.filters import CategoryFilter
+from category.filters import CarousalItemFilter, CategoryFilter
 from ecoinomy.views import DefaultOrderingMixin
 
 
@@ -59,6 +59,9 @@ class CarouselViewSet(DefaultOrderingMixin, viewsets.ModelViewSet):
 
     serializer_class = CarouselSerializer
     permission_classes = (IsAuthenticated, IsAdminUser)
+    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filterset_class = CarousalItemFilter
+    ordering_fields = ['created_at']
     queryset = CarousalItem.objects.all()
 
     def get_permissions(self):

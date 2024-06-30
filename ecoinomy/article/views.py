@@ -8,7 +8,7 @@ from django_countries import countries
 
 from article.serializers import ArticleSerializer, ArticleAuthorSerializer, ArticleViewsSerializer, SnippetSerializer
 from article.models import Article, ArticleType, ArticleViews, ArticleAuthor, Snippet
-from article.filters import ArticleFilter
+from article.filters import ArticleFilter, SnippetFilter
 from ecoinomy.views import DefaultOrderingMixin
 
 
@@ -68,6 +68,9 @@ class ArticleViewsViewSet(DefaultOrderingMixin, ModelViewSet):
 class SnippetViewSet(DefaultOrderingMixin, ModelViewSet):
     serializer_class = SnippetSerializer
     permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filterset_class = SnippetFilter
+    ordering_fields = ['heading', 'created_at']
     queryset = Snippet.objects.all()
 
     def get_permissions(self):

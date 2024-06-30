@@ -7,11 +7,14 @@ from rest_framework.serializers import ValidationError
 from allauth.utils import email_address_exists
 from dj_rest_auth.utils import jwt_encode
 from dj_rest_auth.serializers import JWTSerializer
+from rest_framework.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 from eco_auth.helpers import phone_number_exists, get_user_by_email_phone_number, \
     user_token_generator, send_login_otp_to_user, generate_otp
 from .serializers import CustomRegisterSerializers, OTPVerifySerializer, \
     GroupSerializer, Group, PermissionSerializer, Permission
+from .filters import GroupFilter, PermissionFilter
 
 
 class CustomRegisterView(RegisterView):
@@ -79,6 +82,9 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     serializer_class = GroupSerializer
     permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filterset_class = GroupFilter
+    ordering_fields = ['name', 'created_at']
     queryset = Group.objects.all()
 
 
@@ -86,4 +92,7 @@ class PermissionViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewse
 
     serializer_class = GroupSerializer
     permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filterset_class = PermissionFilter
+    ordering_fields = ['name']
     queryset = Permission.objects.all()
