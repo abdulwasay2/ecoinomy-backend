@@ -46,6 +46,24 @@ class ArticleViewSet(DefaultOrderingMixin, ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
     
+    def update(self, request, *args, **kwargs):
+        if "multipart/form-data" in request.headers.get("Content-Type"):
+            article_by = json.loads(request.data.pop("article_by", ['{}'])[0])
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        if "multipart/form-data" in request.headers.get("Content-Type"):
+            serializer.validated_data.update({"article_by": article_by})
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+    
     @action(methods=["GET"], detail=False)
     def get_article_types(self, request, *args, **kwargs):
         return Response(data={"types": ArticleType.choices})
