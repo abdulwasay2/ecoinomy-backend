@@ -26,6 +26,7 @@ class CategoryViewSet(DefaultOrderingMixin, viewsets.ModelViewSet):
     filterset_class = CategoryFilter
     ordering_fields = ['name', 'created_at']
     permission_classes = (IsAuthenticated, IsAdminUser)
+    ordering = ["id"]
     queryset = Category.objects.all()
 
     def get_serializer_class(self):
