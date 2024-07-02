@@ -38,6 +38,10 @@ class ArticleViews(BaseModel):
 class Snippet(BaseModel):
     heading = models.CharField(max_length=255)
     body = models.TextField()
-    sub_category = models.ForeignKey('category.Category', on_delete=models.CASCADE, related_name="snippets")
+    sub_category = models.ForeignKey(
+        'category.Category', 
+        on_delete=models.CASCADE, 
+        related_name="snippets",
+        blank=True, null=True)
     country = CountryField(max_length=255, null=True, blank=True, default="CA")
     is_active = models.BooleanField(default=True)
