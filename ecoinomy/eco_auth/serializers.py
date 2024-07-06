@@ -11,8 +11,9 @@ from dj_rest_auth.serializers import (
 )
 from django.conf import settings
 from django.contrib.auth.models import Permission
+from rest_framework.exceptions import NotFound, PermissionDenied
 
-from eco_auth.helpers import generate_otp
+from eco_auth.helpers import generate_otp, get_user_by_email_phone_number
 from eco_auth.forms import PasswordResetForm
 from eco_auth.models import Group
 
@@ -69,6 +70,15 @@ class PasswordResetSerializer(BasePasswordResetSerializer):
     def get_email_options(self):
         """Override this method to change default e-mail options"""
         return {"template_prefix": "email/password_reset"}
+    
+    def validate(self, attrs):
+        email = attrs.get("email")
+        user = get_user_by_email_phone_number(email=email)
+        if not user:
+            raise NotFound(detail="user with given email not found")
+        if not user.is_staff:
+            raise PermissionDenied(detail="customer account is not allowed to perform this action")
+        return super().validate(attrs)
     
 
 class CustomPasswordResetConfirmSerializer(BasePasswordResetConfirmSerializer):
