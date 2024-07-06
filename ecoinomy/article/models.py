@@ -25,7 +25,7 @@ class Article(BaseModel):
                                    null=True, related_name="authored_articles")
     views = models.ManyToManyField('user.User', null=True, through="ArticleViews", related_name="articles_viewed")
     estimated_time_to_read = models.DurationField(null=True)
-    article_type = models.CharField(max_length=256, choices=ArticleType.choices)
+    article_type = models.CharField(max_length=256)
     country = CountryField(max_length=255, null=True, blank=True, default="CA")
     is_active = models.BooleanField(default=True)
 
