@@ -9,6 +9,7 @@ from dj_rest_auth.utils import jwt_encode
 from dj_rest_auth.serializers import JWTSerializer
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.exceptions import PermissionDenied
 
 from eco_auth.helpers import phone_number_exists, get_user_by_email_phone_number, \
     user_token_generator, send_login_otp_to_user, generate_otp
@@ -40,6 +41,8 @@ class CustomRegisterView(RegisterView):
         user = get_user_by_email_phone_number(**serializer.data)
         if not user:
             user = self.perform_create(serializer)
+        if not user.is_active:
+            raise PermissionDenied(detail="Your account has been deactivated, contact the site admin")
         headers = self.get_success_headers(serializer.data)
         data = self.get_response_data(user)
 

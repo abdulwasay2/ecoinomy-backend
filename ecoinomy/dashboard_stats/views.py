@@ -18,7 +18,8 @@ class DashboardStatsView(APIView):
 
     def get(self, request, **kwargs):
         current_date = timezone.now().date() 
-        most_recent_monday = current_date - timezone.timedelta(days=current_date.weekday())
+        # most_recent_monday = current_date - timezone.timedelta(days=current_date.weekday())
+        most_recent_monday = current_date
         start_of_prev_week = most_recent_monday - timezone.timedelta(days=7)
         end_of_prev_week = most_recent_monday - timezone.timedelta(days=1)
         response = {
@@ -36,7 +37,8 @@ class DashboardGraphsDataView(APIView):
 
     def get(self, request, **kwargs):
         current_date = timezone.now().date() 
-        most_recent_monday = current_date - timezone.timedelta(days=current_date.weekday())
+        # most_recent_monday = current_date - timezone.timedelta(days=current_date.weekday())
+        most_recent_monday = current_date
         start_of_prev_week = most_recent_monday - timezone.timedelta(days=7)
         end_of_prev_week = most_recent_monday - timezone.timedelta(days=1)
         response = {
