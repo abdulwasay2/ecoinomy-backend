@@ -55,4 +55,5 @@ django-taggit
 pyotp
 channels
 channels-redis
-git+https://github.com/textmagic/textmagic-rest-python-v2.git@v2.0.23575
+# git+https://github.com/textmagic/textmagic-rest-python-v2.git@v2.0.23575
+twilio

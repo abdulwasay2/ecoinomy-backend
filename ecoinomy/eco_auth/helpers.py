@@ -8,7 +8,7 @@ from django.utils.crypto import constant_time_compare, salted_hmac
 from pyotp import TOTP
 from django.core.mail import send_mail
 
-from ecoinomy.utils import send_text_message_text_magic
+from ecoinomy.utils import send_text_message_twilio
 
 
 class UserTokenGenerator(PasswordResetTokenGenerator):
@@ -92,7 +92,7 @@ def send_login_otp_to_user(email=None, phone_number=None):
         )
 
     if phone_number:
-        send_text_message_text_magic(subject + "\n" + message, [phone_number])
+        send_text_message_twilio(subject + "\n" + message, phone_number)
 
 
 user_token_generator = UserTokenGenerator()
