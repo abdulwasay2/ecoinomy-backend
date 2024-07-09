@@ -80,4 +80,7 @@ class ProfileViewSet(DefaultOrderingMixin, mixins.RetrieveModelMixin, mixins.Upd
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+        if request.data.get("email"):
+            instance.user.email = request.data.get("email")
+            instance.user.save()
         return Response(serializer.data)
