@@ -16,7 +16,7 @@ class CategoryFilter(filters.FilterSet):
     
     @staticmethod
     def filter_by_is_active(queryset, name, value):
-        return queryset.filter(is_active=value).prfetch_related(
+        return queryset.filter(is_active=value).prefetch_related(
             Prefetch(
                 "sub_categories",
                 queryset=Category.objects.filter(is_active=value)
