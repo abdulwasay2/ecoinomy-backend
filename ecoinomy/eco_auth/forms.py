@@ -32,7 +32,7 @@ class PasswordResetForm(BasePasswordResetForm):
         email = self.cleaned_data["email"]
         email_field_name = UserModel.get_email_field_name()
         for user in self.get_users(email):
-            totp = generate_otp(settings.PASSWORD_RESET_OTP_SECRET)
+            totp = generate_otp(f"{settings.PASSWORD_RESET_OTP_SECRET}_{user.pk}")
             token = totp.now()
             user_email = getattr(user, email_field_name)
             uid = urlsafe_base64_encode(force_bytes(user.pk))

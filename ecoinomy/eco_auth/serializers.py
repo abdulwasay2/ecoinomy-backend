@@ -97,7 +97,7 @@ class CustomPasswordResetConfirmSerializer(BasePasswordResetConfirmSerializer):
         except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
             raise serializers.ValidationError({"uid": ["Invalid value"]})
 
-        totp = generate_otp(settings.PASSWORD_RESET_OTP_SECRET)
+        totp = generate_otp(f"{settings.PASSWORD_RESET_OTP_SECRET}_{self.user.pk}")
         if not totp.verify(parsed_key[0] if parsed_key else ''):
             raise serializers.ValidationError({"token": ["Invalid value"]})
 

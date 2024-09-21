@@ -10,6 +10,7 @@ from dj_rest_auth.serializers import JWTSerializer
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.exceptions import PermissionDenied
+from django.conf import settings
 
 from eco_auth.helpers import phone_number_exists, get_user_by_email_phone_number, \
     user_token_generator, send_login_otp_to_user, generate_otp
@@ -28,7 +29,7 @@ class CustomRegisterView(RegisterView):
         if not medium:
             medium = "phone number" if incoming_data.get("phone_number") else ""
         if medium:
-            send_login_otp_to_user(**incoming_data)
+            send_login_otp_to_user(user_id=user.pk, **incoming_data)
         return {
             "ephemeral_token": token,
             "message": f"opt sent to your {medium}"
@@ -68,7 +69,8 @@ class VerifyOTPView(CreateAPIView):
         user = user_token_generator.check_token(token=serializer.validated_data["ephemeral_token"])
         if not user:
             raise ValidationError("ephemeral_token expired or invalid")
-        valid_code = generate_otp().verify(serializer.validated_data["code"])
+        valid_code = generate_otp(
+            f"{settings.OTP_SECRET_KEY}_{user.pk}").verify(serializer.validated_data["code"])
         if not valid_code:
             raise ValidationError("otp code expired or invalid")
         access_token, refresh_token = jwt_encode(user)
