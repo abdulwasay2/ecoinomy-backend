@@ -86,3 +86,8 @@ class ProfileViewSet(
             instance.user.email = request.data.get("email")
             instance.user.save()
         return Response(serializer.data)
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = request.user
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
