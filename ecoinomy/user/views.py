@@ -53,7 +53,9 @@ class UserViewSet(DefaultOrderingMixin, viewsets.ModelViewSet):
             raise ValidationError(detail="The old password doesn't match")
 
 
-class ProfileViewSet(DefaultOrderingMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class ProfileViewSet(
+    DefaultOrderingMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet, 
+    mixins.DestroyModelMixin):
     """
     Viewset for performing crud operations on the 
     logged in User Profile entity \n
