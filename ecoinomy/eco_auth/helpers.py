@@ -78,9 +78,9 @@ def generate_otp(secret=settings.OTP_SECRET_KEY, interval=60 * int(settings.LOGI
     return TOTP(secret, interval=interval)
 
 
-def send_login_otp_to_user(user_id, email=None, phone_number=None):
+def send_login_otp_to_user(email=None, phone_number=None):
     subject = "Ecoinomy Login OTP"
-    code = generate_otp(f"{settings.OTP_SECRET_KEY}_{user_id}").now()
+    code = generate_otp().now()
     message = f"Your one time passcode for login is {code}"
     print(message) 
     if email:
